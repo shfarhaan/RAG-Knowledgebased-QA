@@ -1,0 +1,172 @@
+RAG Systems and Retrieval-Augmented Generation
+
+1. What is RAG?
+Retrieval-Augmented Generation (RAG) is a hybrid approach that combines the strengths of retrieval-based and generation-based models for improved information access and generation quality.
+
+Key Components:
+- Retriever: Finds relevant documents from a knowledge base
+- Retrieval Index: Vector database for efficient similarity search
+- Generator: Language model that generates responses based on retrieved context
+- Ranker: Reranking retrieved documents for relevance
+
+2. Advantages of RAG
+- Reduces hallucinations by grounding responses in real documents
+- Enables domain-specific question answering without retraining
+- Provides source attribution for better transparency
+- Cost-effective compared to fine-tuning large models
+- Allows easy updates to knowledge base without retraining
+- Improves factuality and accuracy of generated content
+
+3. Retrieval Methods
+Vector-based Retrieval:
+- Converts documents and queries into dense vector embeddings
+- Uses similarity metrics like cosine similarity to find relevant documents
+- Fast and scalable using vector databases (FAISS, Pinecone, Qdrant, Weaviate)
+
+Lexical Retrieval:
+- Uses keyword matching and BM25 algorithms
+- Good for finding exact matches
+- Often combined with vector retrieval for hybrid search
+
+Graph-based Retrieval:
+- Uses knowledge graphs to model relationships between entities
+- Enables reasoning over structured knowledge
+- Useful for complex multi-hop queries
+
+4. Embedding Models
+Word Embeddings:
+- Word2Vec, GloVe, FastText
+- Capture semantic meaning at word level
+- Context-independent representations
+
+Sentence Embeddings:
+- BERT, Sentence-BERT (SBERT), Universal Sentence Encoder
+- Capture semantic meaning of entire sentences
+- Context-dependent representations
+
+Document Embeddings:
+- Dense Passage Retrieval (DPR), Contriever
+- Optimized for retrieval tasks
+- Specialized for long-form documents
+
+Dense Retrieval Models:
+- COLBERT, ERNIE-ViL, BGE models
+- State-of-the-art retrieval performance
+- Require training on retrieval tasks
+
+5. Vector Databases
+FAISS (Facebook AI Similarity Search):
+- Open-source library for similarity search
+- Efficient indexing with LSH, IVF, HNSW algorithms
+- Python-based, suitable for local deployments
+
+Pinecone:
+- Managed vector database service
+- Optimized for scale and latency
+- Integrated metadata filtering
+
+Qdrant:
+- Vector database written in Rust
+- Rich filtering capabilities
+- Hybrid search support
+
+Weaviate:
+- Open-source vector database
+- GraphQL API
+- Multi-modal support
+
+6. Chunking Strategies
+Fixed-size Chunking:
+- Divide documents into fixed-length chunks
+- Simple but may break context inappropriately
+
+Semantic Chunking:
+- Chunk based on semantic boundaries
+- Requires sentence clustering or semantic similarity
+- Better preserves context
+
+Sliding Window:
+- Use overlapping windows to maintain context
+- Balance between coverage and redundancy
+
+Tree-based Chunking:
+- Hierarchical chunking at multiple levels
+- Enables multi-level retrieval
+
+7. Ranking and Re-ranking
+Initial Ranking:
+- Vector similarity provides initial relevance scores
+- Fast but may include noise
+
+Re-ranking Strategies:
+- Use more sophisticated models to re-rank results
+- Cross-encoders: Score query-document pairs directly
+- Reciprocal rank fusion: Combine multiple ranking signals
+- Learning-to-rank: ML models trained for ranking optimization
+
+8. Question Answering Architectures
+Pipeline Approach:
+Query → Retriever → Documents → Generator → Answer
+
+Two-Stage Approach:
+1. Retrieval stage: Get relevant documents
+2. Reading comprehension stage: Extract answer from documents
+
+End-to-End Approaches:
+- Retriever and reader trained jointly
+- More efficient and cohesive
+
+Agentic RAG:
+- Agent decides when to retrieve
+- Can perform iterative retrieval and refinement
+- Self-reflection and error correction
+
+9. Evaluation Metrics
+Retrieval Metrics:
+- NDCG (Normalized Discounted Cumulative Gain): Ranking quality
+- MRR (Mean Reciprocal Rank): Position of first relevant document
+- Recall@K: Proportion of relevant documents in top-K results
+
+Generation Metrics:
+- BLEU: Overlap between generated and reference answers
+- ROUGE: Recall-oriented evaluation
+- METEOR: Handles synonyms and paraphrases
+- BERTScore: Contextual similarity
+
+Task-specific Metrics:
+- EM (Exact Match): Percentage of exactly correct answers
+- F1 Score: Precision-recall metric for extracted spans
+- NIST: Information quality evaluation
+
+10. Common Challenges
+Cold Start Problem:
+- Insufficient training data for embedding models
+- Solution: Use pre-trained models and fine-tune
+
+Out-of-Domain Queries:
+- Queries about topics not in knowledge base
+- Solution: Implement confidence thresholds and fallbacks
+
+Context Missing:
+- Retrieved documents lack necessary context
+- Solution: Implement overlapping chunks and larger context windows
+
+Ranking Challenges:
+- Relevant documents ranked low
+- Solution: Use re-ranking and multi-stage retrieval
+
+Hallucination in Generator:
+- Model generates content not in retrieved documents
+- Solution: Constrained generation and grounding verification
+
+11. Best Practices for RAG Systems
+- Use domain-specific embedding models when possible
+- Implement robust chunking strategies
+- Optimize for both retrieval performance and latency
+- Use ensemble methods combining multiple retrievers
+- Monitor and log retrieval and generation quality
+- Implement feedback loops for continuous improvement
+- Provide transparency through source attribution
+- Regular updates to knowledge base and models
+- Test on diverse query types and domains
+- Consider multi-modal RAG for images and text
