@@ -73,19 +73,7 @@ cd "f:\Selise Assessment"
 
 2. **Set up virtual environment and install dependencies:**
 
-**Option A: Automatic Setup (Recommended) ⭐**
-```bash
-# Windows: One command does everything!
-install.bat
-
-# This will:
-# 1. Create virtual environment (venv/)
-# 2. Activate it automatically  
-# 3. Upgrade pip
-# 4. Install all dependencies
-```
-
-**Option B: Manual Setup**
+**Setup Instructions**
 ```bash
 # Step 1: Create virtual environment
 python -m venv venv
@@ -107,7 +95,6 @@ python setup.py
 ```
 
 > **💡 Important**: Always activate the virtual environment before running the application!
-> See [VIRTUAL_ENV_GUIDE.md](VIRTUAL_ENV_GUIDE.md) for detailed instructions.
 
 3. **Set up API credentials:**
 
@@ -289,10 +276,7 @@ With the provided sample documents, try:
 - **Cause**: Packages not yet installed
 - **Solution**: 
   ```bash
-  # Run the installer
-  install.bat
-  
-  # Or install manually
+  # Install dependencies
   pip install -r requirements.txt
   
   # Or verify setup
