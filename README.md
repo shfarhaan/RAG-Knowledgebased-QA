@@ -112,6 +112,10 @@ mkdir .streamlit
 
 ### Running the System
 
+The system provides **three interfaces** for interaction:
+
+#### 1. Streamlit Web UI (Recommended)
+
 **Always activate your virtual environment first!**
 ```bash
 # Windows PowerShell
@@ -134,6 +138,104 @@ streamlit run app.py
 The application will open in your default browser at `http://localhost:8501`
 
 > **Tip**: If you get "command not found" errors, make sure your virtual environment is activated (look for `(venv)` in your prompt).
+
+#### 2. Command-Line Interface (CLI)
+
+For terminal-based interaction:
+
+```bash
+# Process documents
+python cli.py process
+
+# Start interactive chat
+python cli.py chat
+
+# Show system info
+python cli.py info
+
+# Help
+python cli.py help
+```
+
+**CLI Features:**
+- Colored terminal output
+- Interactive chat loop
+- Commands: `quit`, `clear`, `history`
+- Same RAG agent as Streamlit
+
+#### 3. REST API
+
+For programmatic access and integration:
+
+**Start the API server:**
+```bash
+python api.py
+```
+
+Server will start at `http://localhost:8000`
+
+**API Documentation:** `http://localhost:8000/docs` (interactive Swagger UI)
+
+**Available Endpoints:**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | API information and endpoints |
+| GET | `/health` | Health check |
+| GET | `/info` | System information and status |
+| POST | `/chat` | Ask a question |
+| POST | `/process` | Process documents |
+| POST | `/upload` | Upload and save documents |
+| POST | `/clear` | Clear conversation history |
+| DELETE | `/cleanup` | Remove uploaded documents |
+
+**Example API Usage:**
+
+```bash
+# Check health
+curl http://localhost:8000/health
+
+# Get system info
+curl http://localhost:8000/info
+
+# Upload documents
+curl -X POST "http://localhost:8000/upload" \
+  -F "files=@document1.txt" \
+  -F "files=@document2.pdf"
+
+# Process documents
+curl -X POST "http://localhost:8000/process" \
+  -H "Content-Type: application/json" \
+  -d '{"chunk_size": 1000, "chunk_overlap": 200}'
+
+# Ask a question
+curl -X POST "http://localhost:8000/chat" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is machine learning?"}'
+
+# Clean up documents
+curl -X DELETE "http://localhost:8000/cleanup"
+```
+
+**Python Client Example:**
+
+```python
+import requests
+
+# Base URL
+API_URL = "http://localhost:8000"
+
+# Ask a question
+response = requests.post(
+    f"{API_URL}/chat",
+    json={"question": "What is RAG?"}
+)
+
+result = response.json()
+print(f"Answer: {result['answer']}")
+print(f"Sources: {result['sources']}")
+print(f"Confidence: {result['confidence']}%")
+```
 
 ## 📚 Usage Guide
 
