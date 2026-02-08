@@ -268,8 +268,9 @@ def qa_chat_tab(agent):
                         
                         # Display sources
                         if result.get("source_documents"):
+                            unique_sources = list(dict.fromkeys(result["source_documents"]))  # Remove duplicates while preserving order
                             st.subheader("📚 Sources:")
-                            for source in result["source_documents"]:
+                            for source in unique_sources:
                                 st.write(f"• {source}")
                         
                         if result["reasoning_steps"]:

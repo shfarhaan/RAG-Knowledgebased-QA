@@ -158,14 +158,17 @@ class AgenticRAG:
         logger.info("Generating final answer...")
         self.state = AgentState.GENERATING
         
-        # Extract source documents from context
+        # Extract source documents from context (deduplicated)
         sources = []
+        seen_sources = set()
         for line in context.split('\n'):
             if line.startswith('[Document'):
                 # Extract filename from format: [Document 1: filename.txt]
                 if ':' in line:
                     doc_info = line.split(':')[1].split(']')[0].strip()
-                    sources.append(doc_info)
+                    if doc_info not in seen_sources:
+                        sources.append(doc_info)
+                        seen_sources.add(doc_info)
         
         answer_prompt = f"""
         You are a helpful QA assistant. Answer the following question based ONLY on the provided context.
