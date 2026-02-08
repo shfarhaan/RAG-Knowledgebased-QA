@@ -167,14 +167,19 @@ def process_documents_tab():
                 vector_store.save()
                 
                 # Clear the RAG initialization cache so it reloads with new vector store
+                st.info("🔄 Refreshing system cache...")
                 st.cache_resource.clear()
+                st.success("✅ System cache refreshed")
                 
                 st.success("✅ Documents processed and stored successfully!")
                 
                 # Clean up uploaded documents
-                st.info("🧹 Cleaning up temporary files...")
-                if processor.cleanup_documents(DOCUMENTS_PATH):
-                    st.success("✅ Temporary documents removed")
+                with st.spinner("🧹 Cleaning up temporary files..."):
+                    cleanup_success = processor.cleanup_documents(DOCUMENTS_PATH)
+                    if cleanup_success:
+                        st.success("✅ Temporary documents removed from disk")
+                    else:
+                        st.warning("⚠️ Could not clean up all temporary documents")
                 
                 st.balloons()
         

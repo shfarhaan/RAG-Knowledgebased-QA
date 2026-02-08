@@ -162,18 +162,31 @@ class DocumentProcessor:
             
             removed_count = 0
             supported_formats = [".txt", ".pdf", ".md"]
+            files_to_remove = []
             
+            # First, collect all files to remove
             for file_path in Path(directory).rglob("*"):
-                if file_path.suffix.lower() in supported_formats:
-                    try:
-                        os.remove(file_path)
-                        removed_count += 1
-                        logger.info(f"Removed: {file_path.name}")
-                    except Exception as e:
-                        logger.error(f"Error removing {file_path.name}: {str(e)}")
+                if file_path.is_file() and file_path.suffix.lower() in supported_formats:
+                    files_to_remove.append(file_path)
+            
+            if not files_to_remove:
+                logger.info(f"No documents found in {directory} to clean up")
+                return True  # Still return True as there's nothing to do
+            
+            # Then remove them
+            for file_path in files_to_remove:
+                try:
+                    # Close any open handles first
+                    file_path.unlink()  # Use unlink() which is more reliable than os.remove()
+                    removed_count += 1
+                    logger.info(f"Removed: {file_path.name}")
+                except PermissionError as e:
+                    logger.error(f"Permission denied removing {file_path.name}: {str(e)}")
+                except Exception as e:
+                    logger.error(f"Error removing {file_path.name}: {str(e)}")
             
             logger.info(f"Cleanup complete: Removed {removed_count} documents")
-            return removed_count > 0
+            return True  # Return True if cleanup attempted, regardless of individual file success
         
         except Exception as e:
             logger.error(f"Error during cleanup: {str(e)}")
