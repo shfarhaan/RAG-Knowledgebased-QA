@@ -144,3 +144,37 @@ class DocumentProcessor:
         
         logger.info(f"Total chunks created: {len(processed_chunks)}")
         return processed_chunks
+
+    def cleanup_documents(self, directory: str) -> bool:
+        """
+        Remove all uploaded documents from directory after processing
+        
+        Args:
+            directory: Path to documents directory to clean up
+            
+        Returns:
+            True if cleanup successful, False otherwise
+        """
+        try:
+            if not os.path.exists(directory):
+                logger.warning(f"Directory {directory} does not exist")
+                return False
+            
+            removed_count = 0
+            supported_formats = [".txt", ".pdf", ".md"]
+            
+            for file_path in Path(directory).rglob("*"):
+                if file_path.suffix.lower() in supported_formats:
+                    try:
+                        os.remove(file_path)
+                        removed_count += 1
+                        logger.info(f"Removed: {file_path.name}")
+                    except Exception as e:
+                        logger.error(f"Error removing {file_path.name}: {str(e)}")
+            
+            logger.info(f"Cleanup complete: Removed {removed_count} documents")
+            return removed_count > 0
+        
+        except Exception as e:
+            logger.error(f"Error during cleanup: {str(e)}")
+            return False

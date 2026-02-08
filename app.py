@@ -170,6 +170,12 @@ def process_documents_tab():
                 st.cache_resource.clear()
                 
                 st.success("✅ Documents processed and stored successfully!")
+                
+                # Clean up uploaded documents
+                st.info("🧹 Cleaning up temporary files...")
+                if processor.cleanup_documents(DOCUMENTS_PATH):
+                    st.success("✅ Temporary documents removed")
+                
                 st.balloons()
         
         except Exception as e:
